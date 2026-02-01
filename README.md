@@ -32,19 +32,39 @@ The pipeline processes an incoming blurry RGB frame at timestep $t$ as follows:
 
 The main addition to EGS-SLAM is the event-based pose tracker that estimates relative camera poses between two timestamps before the tracking stage. Leveraging this prior on $P_t$, the pose optimization step of EGS-SLAM refined it during the tracking and mapping stages, removing the accumulated drift from the event-based tracker.
 
-## Experimental setup & Baselines
+## Experimental setup & baselines
+
+EGS-SLAM [1] is used as the main baseline. We implement the event-based pose tracker using two approaches:
+
+In the dense setup, we evaluate results following the approach of [1], computing the tracking and reconstruction metrics on non-keyframe frames which are dynamically selected during optimization.
+
+In the sparse setup, unseen frames for evaluation are uniformly selected in between the frames used for optimization. We follow the evaluation approach of [5], where the pose for a given eval frame is interpolated from the two adjacent frames and optimized based on the reconstruction losses.
+
+### Metrics
+
+Pose/Tracking: ATE on camera trajectories.
+
+Reconstruction: PSNR/SSIM/LPIPS on rendered views.
+
+Note that the two sets of metrics are not directly correlated, as good reconstruction can be achieved even with poor camera tracking, since views for reconstruction are rendered using estimated rather than groundtruth (GT) poses.
+
+### Datasets
+
+We evaluate our method using the datasets of [1]:
+
+- EventReplica: synthetic data; seven indoor scenes with 400 frames on average; events generated via ESIM [4].
+
+- DEVD: real data; eight indoor scenes with 365 frames on average.
+
+## Where SOTA fails
 
 TBD
 
-## Key Observation: Where EGS-SLAM Fails
+## Adding relative pose prior
 
 TBD
 
-## Attacking Pose Propagation
-
-TBD
-
-## Secondary Experiments & Side Insights
+## Secondary experiments & side insights
 
 TBD
 
@@ -52,11 +72,26 @@ TBD
 
 TBD
 
-## Takeaways & Future Directions (Interview Gold)
+## Takeaways
 
-TBD
+- 3DGS-SLAM on blurry data works well when augmented with event priors such as brightness loss
+- camera tracking is negatively affected by frame sparsity, while mapping remains sufficiently high quality
+- the reason for the tracking failure is the assumption on small delta poses that allows to implicitly optimize them via rendering losses
+- relative pose priors improve sparse-view tracking performance by up to 2.5x while occasionally displaying instability on dense views
+  - additional filtering based on correspondences improves pose reliability, but has to be configured manually and is not scalable
+- dense motion cues (RGB flow, event flow) are more reliable and robust than sparse matches on textureless scenes
+
+What didn't work:
+
+- explicit reprojection-based pose supervision fails without sufficient high-quality correspondences
+- learning-based dense flow from events is promising but currently bottlenecked by generalization and data scarcity
+  - contrast maximization for optical flow lags behind deep learning approaches in both quality and efficiency
+- distilling a foundational RGB flow model [3] to event inputs on EventReplica/DEVD datasets [1] lacks data to generalize well
 
 ## References
 
 1. [EGS-SLAM: RGB-D Gaussian Splatting SLAM with Events](https://arxiv.org/abs/2508.07003)
 2. [BAD-Gaussians: Bundle Adjusted Deblur Gaussian Splatting](https://arxiv.org/html/2403.11831v2)
+3. [Unifying Flow, Stereo and Depth Estimation](https://github.com/autonomousvision/unimatch)
+4. [ESIM: an Open Event Camera Simulator](https://rpg.ifi.uzh.ch/esim.html)
+5. [InstantSplat: Sparse-view SfM-free Gaussian Splatting in Seconds](https://arxiv.org/abs/2403.20309)
