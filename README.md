@@ -62,7 +62,17 @@ We evaluate our method using the datasets of [1]:
 
 ## Where SOTA fails
 
-TBD
+We identified two problematic aspects of EGS-SLAM:
+
+- low reconstruction quality on textureless surfaces
+- failure to converge to a good camera trajectory in setups with large camera motion
+
+Textureless surfaces is a fundamental problem for event-based methods, as too few events are triggered in these regions, making the event part of the optimization unstable.
+
+The second problem is grounded in how camera poses are optimized. The optimized pose from the timestep `t-1` is taken as initialization at `t`, which is hard to optimize implicitly via rendering-based losses alone. We explore two possible ways of attacking this problem: 
+
+1. Utilize temporally-dense event stream to smoothly propagate camera poses between `t-1` and `t`
+2. Impose geometrical constraints when optimizing the pose
 
 ## Adding relative pose prior
 
