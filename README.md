@@ -101,6 +101,8 @@ What didn't work:
 - learning-based dense flow from events is promising but currently bottlenecked by generalization and data scarcity
   - contrast maximization for optical flow lags behind deep learning approaches in both quality and efficiency
 - distilling a foundational RGB flow model [3] to event inputs on EventReplica/DEVD datasets [1] lacks data to generalize well
+- improving reconstruction quality with a constrast maximization loss
+  - event prior is already present by means of the brightness loss
 
 ## References
 
