@@ -157,40 +157,41 @@ Qualitative results on two randomly picked scenes (`office4` and `room0`) from E
 
 </table>
 
-Full evaluation subsets used for the scenes above, each video using the same convention as the static images:
+Full evaluation subsets used for the scenes above, each video following the same convention as the static images (please click on the gif to open the video):
 
 <table>
 
 <tr>
-
-<tr>
 <td align="center">
-<video autoplay loop muted controls width="640">
-  <source src="docs/qual_eventreplica_office4_fstep=4.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_office4_fstep=4.mp4">
+<img src="docs/qual_eventreplica_office4_fstep=4.gif" width="640">
+</a>
 </td>
+
 <td align="center">
-<video autoplay loop muted controls width="640">
-  <source src="docs/qual_eventreplica_room0_fstep=4.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_room0_fstep=4.mp4">
+<img src="docs/qual_eventreplica_room0_fstep=4.gif" width="640">
+</a>
 </td>
 </tr>
+
 <tr>
 <td align="center" colspan="2">
-<h4>Frame step = 4</h4>
+<b>Frame step = 4</b>
 </td>
 </tr>
 
 <tr>
 <td align="center">
-<video controls width="640">
-  <source src="docs/qual_eventreplica_office4_fstep=8.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_office4_fstep=8.mp4">
+<img src="docs/qual_eventreplica_office4_fstep=8.gif" width="640">
+</a>
 </td>
+
 <td align="center">
-<video controls width="640">
-  <source src="docs/qual_eventreplica_room0_fstep=8.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_room0_fstep=8.mp4">
+<img src="docs/qual_eventreplica_room0_fstep=8.gif" width="640">
+</a>
 </td>
 </tr>
 <tr>
@@ -201,14 +202,15 @@ Full evaluation subsets used for the scenes above, each video using the same con
 
 <tr>
 <td align="center">
-<video controls width="640">
-  <source src="docs/qual_eventreplica_office4_fstep=16.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_office4_fstep=16.mp4">
+<img src="docs/qual_eventreplica_office4_fstep=16.gif" width="640">
+</a>
 </td>
+
 <td align="center">
-<video controls width="640">
-  <source src="docs/qual_eventreplica_room0_fstep=16.mp4" type="video/mp4">
-</video>
+<a href="docs/qual_eventreplica_room0_fstep=16.mp4">
+<img src="docs/qual_eventreplica_room0_fstep=16.gif" width="640">
+</a>
 </td>
 </tr>
 <tr>
