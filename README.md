@@ -76,7 +76,7 @@ The second problem is grounded in how camera poses are optimized. The optimized 
 
 ## Adding relative pose prior
 
-Pose trajectory and rendering quality of EGS-SLAM degrades with increasing frame sparsity:
+Pose trajectory and rendering quality of EGS-SLAM substantially degrades with increasing frame sparsity:
 
 | Frame Step | ATE (cm) ↓      | PSNR ↑       | SSIM ↑      | LPIPS ↓     |
 | ---------- | --------------- | ------------ | ----------- | ----------- |
@@ -157,7 +157,7 @@ Qualitative results on two randomly picked scenes (`office4` and `room0`) from E
 
 </table>
 
-Full evaluation subsets used for the scenes above, each video following the same convention as the static images (please click on the gif to open the video):
+Full evaluation subsets used for the scenes above, each video following the same convention as the static images (please click on a gif to open the video):
 
 <table>
 
@@ -221,6 +221,12 @@ Full evaluation subsets used for the scenes above, each video following the same
 
 </table>
 
+However, due to the reliance on a pre-trained event-based point tracker, our method showed limited generalization to real-world scenes from the DEVD dataset.
+
+TBD.
+
+One of the problematic scenes (`table1`) contains plenty of textureless surfaces which potentially contribute to noisy event tracks. The other scene, `mountain1`, contains multiple objects with an identical appearance, potentially confusing the tracker.
+
 ## Secondary experiments & side insights
 
 ### Can relative pose computed from event tracking be improved?
@@ -270,18 +276,21 @@ Point matching is known to not be robust to blur. The results below confirm this
 ## Takeaways
 
 - 3DGS-SLAM on blurry data works well when augmented with event priors such as brightness loss
-- camera tracking is negatively affected by frame sparsity, while mapping remains sufficiently high quality
-- the reason for the tracking failure is the assumption on small delta poses that allows to implicitly optimize them via rendering losses
-- relative pose priors improve sparse-view tracking performance by up to 2.5x while occasionally displaying instability on dense views
-  - additional filtering based on correspondences improves pose reliability, but has to be configured manually and is not scalable
-- dense motion cues (RGB flow, event flow) are more reliable and robust than sparse matches on textureless scenes
+- frame sparsity significantly degrades reconstruction and tracking quality
+- one of the reasons for this poor performance is the assumption on small pose deltas between frames, allowing implicit optimization of poses via rendering losses
+- relative pose priors improve sparse-view performance by up to 2.5x while occasionally displaying instability on dense views
+  - additional filtering based on the number or confidence of correspondences improves pose reliability, but requires manual tuning and is not scalable. Selecting reliable correspondences dynamically is a promising research direction
+- dense motion cues (RGB flow, event flow) outperform point matching in quality and robustness when both are paired with PnP for pose estimation, especially in textureless scenes
+- deblurring with EDI introduces artifacts that substantially harm camera tracking performance
+- limited generalization of event-based deep learning models bottlenecks downstream applications due to unreliable events priors. Creating a large-scale high-quality synthetic dataset for training such models is an important milestone for building real-world solutions with event cameras
 
 What didn't work:
 
-- explicit reprojection-based pose supervision fails without sufficient high-quality correspondences
 - learning-based dense flow from events is promising but currently bottlenecked by generalization and data scarcity
   - contrast maximization for optical flow lags behind deep learning approaches in both quality and efficiency
-- distilling a foundational RGB flow model [3] to event inputs on EventReplica/DEVD datasets [1] lacks data to generalize well
+- explicit reprojection-based pose supervision fails without sufficient high-quality correspondences
+- distilling a foundational RGB flow model [3] to event inputs on EventReplica/DEVD datasets [1] following the approach of [10] lacks data to generalize well
+  - collecting a large-scale synthetic dataset for pre-training should mitigate this problem
 - improving reconstruction quality with a constrast maximization loss
   - event prior is already present by means of the brightness loss
 
@@ -296,3 +305,4 @@ What didn't work:
 7. [Segment Any Events via Weighted Adaptation of Pivotal Tokens](https://arxiv.org/abs/2312.16222)
 8. [LightGlue: Local Feature Matching at Light Speed](https://arxiv.org/abs/2306.13643)
 9. [Dense Continuous-Time Optical Flow from Event Cameras](https://github.com/uzh-rpg/bflow)
+10. [Segment Any Event Streams via Weighted Adaptation of Pivotal Tokens](https://github.com/zhiwen-xdu/EventSAM)
