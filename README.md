@@ -109,6 +109,102 @@ In the sparse view settings, our method based on event-based pose tracking achie
 | ✗ | 16 | 91.36 ± 29.40 | 14.98 ± 3.14 | 0.52 ± 0.10 | 0.68 ± 0.08 |
 | ✓ | 16 | 44.66 ± 21.12 | 21.76 ± 2.84 | 0.71 ± 0.07 | 0.40 ± 0.09 |
 
+Qualitative results on two randomly picked scenes (`office4` and `room0`) from EventReplica:
+
+<table>
+<tr>
+<td align="center">
+<img src="docs/qual_eventreplica_office4_orig_fstep=4.png" width="320">
+</td>
+<td align="center">
+<img src="docs/qual_eventreplica_room0_orig_fstep=4.png" width="320">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 4</h4>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="docs/qual_eventreplica_office4_orig_fstep=8.png" width="320">
+</td>
+<td align="center">
+<img src="docs/qual_eventreplica_room0_orig_fstep=8.png" width="320">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 8</h4>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="docs/qual_eventreplica_office4_orig_fstep=16.png" width="320">
+</td>
+<td align="center">
+<img src="docs/qual_eventreplica_room0_orig_fstep=16.png" width="320">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 16</h4>
+</td>
+</tr>
+
+</table>
+
+Full evaluation subsets used for the scenes above, each video using the same convention as the static images:
+
+<table>
+
+<tr>
+<td align="center">
+<video src="docs/qual_eventreplica_office4_fstep=4.mp4" autoplay loop muted controls width="640"></video>
+</td>
+<td align="center">
+<video src="docs/qual_eventreplica_room0_fstep=4.mp4" autoplay loop muted controls width="640"></video>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 4</h4>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<video src="docs/qual_eventreplica_office4_fstep=8.mp4" controls width="640"></video>
+</td>
+<td align="center">
+<video src="docs/qual_eventreplica_room0_fstep=8.mp4" controls width="640"></video>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 8</h4>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<video src="docs/qual_eventreplica_office4_fstep=16.mp4" controls width="640"></video>
+</td>
+<td align="center">
+<video src="docs/qual_eventreplica_room0_fstep=16.mp4" controls width="640"></video>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<h4>Frame step = 16</h4>
+</td>
+</tr>
+
+</table>
+
 ## Secondary experiments & side insights
 
 ### Can relative pose computed from event tracking be improved?
