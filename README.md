@@ -67,7 +67,7 @@ We identified two problematic aspects of EGS-SLAM:
 - low reconstruction quality on textureless surfaces
 - failure to converge to a good camera trajectory in setups with large camera motion
 
-Textureless surfaces is a fundamental problem for event-based methods, as too few events are triggered in these regions, making the event part of the optimization unstable.
+Textureless surfaces is a fundamental problem for event-based methods, as too few events are triggered in these regions, making the event part of the optimization carry noisy information.
 
 The second problem is grounded in how camera poses are optimized. The optimized pose from the timestep `t-1` is taken as initialization at `t`, which is hard to optimize implicitly via rendering-based losses alone. We explore two possible ways of attacking this problem: 
 
@@ -111,9 +111,9 @@ In the sparse view settings, our method based on event-based pose tracking achie
 
 ## Secondary experiments & side insights
 
-TBD.
+### Can relative pose computed from event tracking be improved?
 
-Can relative pose computed from event tracking be improved? One of the ideas is to refine it with a flow reconstruction objective: after obtaining an initial relative pose between two sparse frames, improve it by optimizing for the optical flow computed between these frames:
+One of the ideas is to refine it with a flow reconstruction objective: after obtaining an initial relative pose between two sparse frames, improve it by optimizing for the optical flow computed between these frames:
 
 | RGB Flow Reconstruction | Frame Step | ATE (cm) ↓        | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
 |------------------------|------------|------------------|--------------|--------------|--------------|
@@ -124,22 +124,36 @@ Can relative pose computed from event tracking be improved? One of the ideas is 
 | ✗ | 16 | 44.66 ± 21.12 | 21.76 ± 2.84 | 0.71 ± 0.07 | 0.40 ± 0.09 |
 | ✓ | 16 | 31.75 ± 27.38 | 24.45 ± 4.25 | 0.77 ± 0.09 | 0.32 ± 0.12 |
 
-How does a pretrained model for optical flow from events [9] compare to event tracking?
+### How does a pretrained model for optical flow from events [9] compare to event tracking?
 
 | Event-Based Optical Flow | Frane Step | ATE (cm) ↓     | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
 |----------------|------|---------------|--------------|--------------|--------------|
 | ✓ | 4  | 67.23 ± 40.59 | 21.74 ± 3.32 | 0.70 ± 0.09 | 0.41 ± 0.09 |
-| ✗ | 4  | **24.78 ± 15.90** | **24.91 ± 3.76** | **0.78 ± 0.09** | **0.30 ± 0.12** |
+| ✗ | 4  | **24.78 ± 15.90** | **24.91 ± 3.76** | 0.78 ± 0.09 | 0.30 ± 0.12 |
 | ✓ | 8  | 91.57 ± 36.87 | 19.52 ± 3.25 | 0.64 ± 0.08 | 0.51 ± 0.06 |
 | ✗ | 8  | 34.91 ± 17.61 | 23.66 ± 3.45 | 0.76 ± 0.08 | 0.34 ± 0.11 |
 | ✓ | 16 | 104.63 ± 33.39 | 16.44 ± 3.00 | 0.52 ± 0.10 | 0.62 ± 0.08 |
 | ✗ | 16 | 44.66 ± 21.12 | 21.76 ± 2.84 | 0.71 ± 0.07 | 0.40 ± 0.09 |
 
-TBD
+### Does point matching via SuperPoint/LightGlue provide a better upperbound on performance than optical flow?
+
+Point matching is known to not be robust to blur. The results below confirm this hypothesis, showing that the performance of the relative pose prior based on the SOTA point matching of [8] is unstable under blur. Moreover, the results on sharp images are inferior to those of optical flow on blurry images, which may be explained by insufficient quality and confidence of matched points, potentially due to the presense of textureless frames in the EventReplica dataset.
+
+| Sharp RGB Input | Frame Step | ATE (cm) ↓      | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|-----------|------------|-----------------|---------------|---------------|---------------|
+| ✗         | 1          | 48.38 ± 112.97  | 27.91 ± 3.13  | 0.84 ± 0.05   | 0.18 ± 0.05 |
+| ✓         | 1          | 12.18 ± 20.85 | 27.88 ± 3.66  | 0.84 ± 0.07   | 0.19 ± 0.08   |
+| ✗         | 4          | 48.63 ± 19.09   | 21.45 ± 3.61  | 0.70 ± 0.08   | 0.43 ± 0.10   |
+| ✓         | 4          | **10.74 ± 14.51** | **28.52 ± 4.28** | 0.85 ± 0.07 | 0.20 ± 0.09 |
+| ✗         | 8          | 84.85 ± 28.33   | 17.03 ± 3.42  | 0.59 ± 0.10   | 0.62 ± 0.09   |
+| ✓         | 8          | 13.11 ± 22.33 | 27.06 ± 4.11 | 0.82 ± 0.07 | 0.22 ± 0.06 |
+| ✗         | 16         | 91.42 ± 29.51   | 15.37 ± 2.79  | 0.53 ± 0.08   | 0.67 ± 0.07   |
+| ✓         | 16         | 27.84 ± 24.12 | 21.93 ± 3.75 | 0.72 ± 0.08 | 0.33 ± 0.10 |
 
 ## Limitations
 
-TBD
+- relative pose updates may be noisy, allowing for irrecoverable shift from the trajectory. To improve their reliability, PnP-RANSAC should use only high-confidence (e.g., `>0.95`) point matches or tracks. A dynamic way to determine confidence of points and automatically add or remove keypoints from the tracked set is an important research direction
+- the method relies on SOTA in event-based point tracking, which at the time of this writing does not provide sufficiently high tracking quality
 
 ## Takeaways
 
@@ -169,3 +183,4 @@ What didn't work:
 6. [Secrets of Event-Based Optical Flow](https://arxiv.org/abs/2207.10022)
 7. [Segment Any Events via Weighted Adaptation of Pivotal Tokens](https://arxiv.org/abs/2312.16222)
 8. [LightGlue: Local Feature Matching at Light Speed](https://arxiv.org/abs/2306.13643)
+9. [Dense Continuous-Time Optical Flow from Event Cameras](https://github.com/uzh-rpg/bflow)
