@@ -76,7 +76,38 @@ The second problem is grounded in how camera poses are optimized. The optimized 
 
 ## Adding relative pose prior
 
-TBD
+Pose trajectory and rendering quality of EGS-SLAM degrades with increasing frame sparsity:
+
+| Frame Step | ATE (cm) ↓      | PSNR ↑       | SSIM ↑      | LPIPS ↓     |
+| ---------- | --------------- | ------------ | ----------- | ----------- |
+| 1          | **4.51 ± 2.43** | 27.83 ± 3.61 | 0.83 ± 0.07 | 0.19 ± 0.06 |
+| 4          | 63.65 ± 20.51   | 20.47 ± 4.02 | 0.67 ± 0.09 | 0.47 ± 0.11 |
+| 8          | 88.05 ± 31.66   | 17.07 ± 3.44 | 0.59 ± 0.10 | 0.62 ± 0.09 |
+| 16         | 91.36 ± 29.40   | 14.98 ± 3.14 | 0.52 ± 0.10 | 0.68 ± 0.08 |
+
+An upper-bound for performance with the relative pose update can be obtained via a pretrained RGB optical flow:
+
+| Vanilla EGS-SLAM | Rel.Pose With RGB Opt. Flow | Frame Step | ATE (cm) ↓        | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|------------------|---------------|-----------|------------------|--------------|--------------|--------------|
+| ✓ | ✗ | 1  | 4.51 ± 2.43 | 27.83 ± 3.61 | 0.83 ± 0.07 | 0.19 ± 0.06 |
+| ✗ | ✓ | 1  | **2.54 ± 1.49** | **28.59 ± 3.47** | 0.85 ± 0.06 | 0.17 ± 0.06 |
+| ✓ | ✗ | 4  | 63.65 ± 20.51 | 20.47 ± 4.02 | 0.67 ± 0.09 | 0.47 ± 0.11 |
+| ✗ | ✓ | 4  | 4.39 ± 3.68 | 28.44 ± 3.74 | 0.85 ± 0.06 | 0.19 ± 0.06 |
+| ✓ | ✗ | 8  | 88.05 ± 31.66 | 17.07 ± 3.44 | 0.59 ± 0.10 | 0.62 ± 0.09 |
+| ✗ | ✓ | 8  | 5.68 ± 3.46 | 27.35 ± 3.47 | 0.83 ± 0.06 | 0.22 ± 0.06 |
+| ✓ | ✗ | 16 | 91.36 ± 29.40 | 14.98 ± 3.14 | 0.52 ± 0.10 | 0.68 ± 0.08 |
+| ✗ | ✓ | 16 | 40.86 ± 19.27 | 20.05 ± 1.80 | 0.67 ± 0.06 | 0.41 ± 0.10 |
+
+In the sparse view settings, our method based on event-based pose tracking achieves a significant improvement over the baseline in both camera tracking and reconstruction:
+
+| Rel.Pose With Event Tracking | Frame Step | ATE (cm) ↓       | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|-----------------------|------------|------------------|--------------|--------------|--------------|
+| ✗ | 4  | 63.65 ± 20.51 | 20.47 ± 4.02 | 0.67 ± 0.09 | 0.47 ± 0.11 |
+| ✓ | 4  | **24.78 ± 15.90** | **24.91 ± 3.76** | 0.78 ± 0.09 | 0.30 ± 0.12 |
+| ✗ | 8  | 88.05 ± 31.66 | 17.07 ± 3.44 | 0.59 ± 0.10 | 0.62 ± 0.09 |
+| ✓ | 8  | 34.91 ± 17.61 | 23.66 ± 3.45 | 0.76 ± 0.08 | 0.34 ± 0.11 |
+| ✗ | 16 | 91.36 ± 29.40 | 14.98 ± 3.14 | 0.52 ± 0.10 | 0.68 ± 0.08 |
+| ✓ | 16 | 44.66 ± 21.12 | 21.76 ± 2.84 | 0.71 ± 0.07 | 0.40 ± 0.09 |
 
 ## Secondary experiments & side insights
 
