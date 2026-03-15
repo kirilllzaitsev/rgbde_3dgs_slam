@@ -164,13 +164,13 @@ Full evaluation subsets used for the scenes above, each video following the same
 <tr>
 <td align="center">
 <a href="docs/qual_eventreplica_office4_fstep=4.mp4">
-<img src="docs/qual_eventreplica_office4_fstep=4.gif" width="640">
+<img src="docs/qual_eventreplica_office4_fstep=4.gif" width="100%">
 </a>
 </td>
 
 <td align="center">
 <a href="docs/qual_eventreplica_room0_fstep=4.mp4">
-<img src="docs/qual_eventreplica_room0_fstep=4.gif" width="640">
+<img src="docs/qual_eventreplica_room0_fstep=4.gif" width="100%">
 </a>
 </td>
 </tr>
@@ -184,13 +184,13 @@ Full evaluation subsets used for the scenes above, each video following the same
 <tr>
 <td align="center">
 <a href="docs/qual_eventreplica_office4_fstep=8.mp4">
-<img src="docs/qual_eventreplica_office4_fstep=8.gif" width="640">
+<img src="docs/qual_eventreplica_office4_fstep=8.gif" width="100%">
 </a>
 </td>
 
 <td align="center">
 <a href="docs/qual_eventreplica_room0_fstep=8.mp4">
-<img src="docs/qual_eventreplica_room0_fstep=8.gif" width="640">
+<img src="docs/qual_eventreplica_room0_fstep=8.gif" width="100%">
 </a>
 </td>
 </tr>
@@ -203,13 +203,13 @@ Full evaluation subsets used for the scenes above, each video following the same
 <tr>
 <td align="center">
 <a href="docs/qual_eventreplica_office4_fstep=16.mp4">
-<img src="docs/qual_eventreplica_office4_fstep=16.gif" width="640">
+<img src="docs/qual_eventreplica_office4_fstep=16.gif" width="100%">
 </a>
 </td>
 
 <td align="center">
 <a href="docs/qual_eventreplica_room0_fstep=16.mp4">
-<img src="docs/qual_eventreplica_room0_fstep=16.gif" width="640">
+<img src="docs/qual_eventreplica_room0_fstep=16.gif" width="100%">
 </a>
 </td>
 </tr>
