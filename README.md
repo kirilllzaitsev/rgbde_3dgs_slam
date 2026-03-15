@@ -114,10 +114,10 @@ Qualitative results on two randomly picked scenes (`office4` and `room0`) from E
 <table>
 <tr>
 <td align="center">
-<img src="docs/qual_eventreplica_office4_orig_fstep=4.png" width="320">
+<img src="docs/qual_eventreplica_office4_orig_fstep=4.png" width="640">
 </td>
 <td align="center">
-<img src="docs/qual_eventreplica_room0_orig_fstep=4.png" width="320">
+<img src="docs/qual_eventreplica_room0_orig_fstep=4.png" width="640">
 </td>
 </tr>
 
@@ -128,10 +128,10 @@ Qualitative results on two randomly picked scenes (`office4` and `room0`) from E
 </tr>
 <tr>
 <td align="center">
-<img src="docs/qual_eventreplica_office4_orig_fstep=8.png" width="320">
+<img src="docs/qual_eventreplica_office4_orig_fstep=8.png" width="640">
 </td>
 <td align="center">
-<img src="docs/qual_eventreplica_room0_orig_fstep=8.png" width="320">
+<img src="docs/qual_eventreplica_room0_orig_fstep=8.png" width="640">
 </td>
 </tr>
 
@@ -142,10 +142,10 @@ Qualitative results on two randomly picked scenes (`office4` and `room0`) from E
 </tr>
 <tr>
 <td align="center">
-<img src="docs/qual_eventreplica_office4_orig_fstep=16.png" width="320">
+<img src="docs/qual_eventreplica_office4_orig_fstep=16.png" width="640">
 </td>
 <td align="center">
-<img src="docs/qual_eventreplica_room0_orig_fstep=16.png" width="320">
+<img src="docs/qual_eventreplica_room0_orig_fstep=16.png" width="640">
 </td>
 </tr>
 
@@ -162,11 +162,17 @@ Full evaluation subsets used for the scenes above, each video using the same con
 <table>
 
 <tr>
+
+<tr>
 <td align="center">
-<video src="docs/qual_eventreplica_office4_fstep=4.mp4" autoplay loop muted controls width="640"></video>
+<video autoplay loop muted controls width="640">
+  <source src="docs/qual_eventreplica_office4_fstep=4.mp4" type="video/mp4">
+</video>
 </td>
 <td align="center">
-<video src="docs/qual_eventreplica_room0_fstep=4.mp4" autoplay loop muted controls width="640"></video>
+<video autoplay loop muted controls width="640">
+  <source src="docs/qual_eventreplica_room0_fstep=4.mp4" type="video/mp4">
+</video>
 </td>
 </tr>
 <tr>
@@ -177,10 +183,14 @@ Full evaluation subsets used for the scenes above, each video using the same con
 
 <tr>
 <td align="center">
-<video src="docs/qual_eventreplica_office4_fstep=8.mp4" controls width="640"></video>
+<video controls width="640">
+  <source src="docs/qual_eventreplica_office4_fstep=8.mp4" type="video/mp4">
+</video>
 </td>
 <td align="center">
-<video src="docs/qual_eventreplica_room0_fstep=8.mp4" controls width="640"></video>
+<video controls width="640">
+  <source src="docs/qual_eventreplica_room0_fstep=8.mp4" type="video/mp4">
+</video>
 </td>
 </tr>
 <tr>
@@ -191,10 +201,14 @@ Full evaluation subsets used for the scenes above, each video using the same con
 
 <tr>
 <td align="center">
-<video src="docs/qual_eventreplica_office4_fstep=16.mp4" controls width="640"></video>
+<video controls width="640">
+  <source src="docs/qual_eventreplica_office4_fstep=16.mp4" type="video/mp4">
+</video>
 </td>
 <td align="center">
-<video src="docs/qual_eventreplica_room0_fstep=16.mp4" controls width="640"></video>
+<video controls width="640">
+  <source src="docs/qual_eventreplica_room0_fstep=16.mp4" type="video/mp4">
+</video>
 </td>
 </tr>
 <tr>
