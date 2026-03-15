@@ -111,6 +111,19 @@ In the sparse view settings, our method based on event-based pose tracking achie
 
 ## Secondary experiments & side insights
 
+TBD.
+
+Can relative pose computed from event tracking be improved? One of the ideas is to refine it with a flow reconstruction objective: after obtaining an initial relative pose between two sparse frames, improve it by optimizing for the optical flow computed between these frames:
+
+| RGB Flow Reconstruction | Frame Step | ATE (cm) ↓        | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|------------------------|------------|------------------|--------------|--------------|--------------|
+| ✗ | 4  | 24.78 ± 15.90 | 24.91 ± 3.76 | 0.78 ± 0.09 | 0.30 ± 0.12 |
+| ✓ | 4  | **14.72 ± 18.06** | **26.75 ± 3.87** | 0.81 ± 0.08 | 0.24 ± 0.11 |
+| ✗ | 8  | 34.91 ± 17.61 | 23.66 ± 3.45 | 0.76 ± 0.08 | 0.34 ± 0.11 |
+| ✓ | 8  | 17.09 ± 18.41 | 27.01 ± 3.29 | 0.82 ± 0.07 | 0.25 ± 0.08 |
+| ✗ | 16 | 44.66 ± 21.12 | 21.76 ± 2.84 | 0.71 ± 0.07 | 0.40 ± 0.09 |
+| ✓ | 16 | 31.75 ± 27.38 | 24.45 ± 4.25 | 0.77 ± 0.09 | 0.32 ± 0.12 |
+
 TBD
 
 ## Limitations
