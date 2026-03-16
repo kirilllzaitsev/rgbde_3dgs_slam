@@ -34,7 +34,7 @@ The main addition to EGS-SLAM is the event-based pose tracker that estimates rel
 
 ## Experimental setup & baselines
 
-We build our approach on top of EGS-SLAM. We implement the event-based pose tracker with several methods: contrast maximization [6], pretrained models for event-based optical flow or point tracking, or a foundational model for RGB optical flow [3] distilled to event inputs following [7]. To test the motion prior efficacy, we created an RGB point detection and matching baseline based on SuperPoint and Lightglue [8].
+We build our approach on top of EGS-SLAM. We implement the event-based pose tracker with several methods: contrast maximization [6], pretrained models for event-based optical flow [9] or point tracking [11], or a foundational model for RGB optical flow [3] distilled to event inputs following [7]. To test the motion prior efficacy, we created RGB-based baselines with point detection and matching (SuperPoint and Lightglue [8]) and optical flow (Unimatch [3]).
 
 We introduce sparsity by uniformly subsampling frames, picking every 4-/8-/16-th frame of the dataset.
 
@@ -46,7 +46,7 @@ In the sparse setup, unseen frames for evaluation are uniformly selected in betw
 
 ### Metrics
 
-Pose/Tracking: ATE on camera trajectories (without scale correction).
+Pose/Tracking: ATE on camera trajectories [12] (without scale correction).
 
 Reconstruction: PSNR/SSIM/LPIPS on rendered views.
 
@@ -75,6 +75,8 @@ The second problem is grounded in how camera poses are optimized. The optimized 
 2. Impose geometrical constraints when optimizing the pose
 
 ## Adding relative pose prior
+
+### Synthetic data experiments
 
 Pose trajectory and rendering quality of EGS-SLAM substantially degrades with increasing frame sparsity:
 
@@ -221,11 +223,109 @@ Full evaluation subsets used for the scenes above, each video following the same
 
 </table>
 
-However, due to the reliance on a pre-trained event-based point tracker, our method showed limited generalization to real-world scenes from the DEVD dataset.
+Next we plot camera trajectories for the scenes presented above. Each figure contain a train (left) and eval (right) trajectories at the respective frame sparsity.
 
-TBD.
+<table>
 
-One of the problematic scenes (`table1`) contains plenty of textureless surfaces which potentially contribute to noisy event tracks. The other scene, `mountain1`, contains multiple objects with an identical appearance, potentially confusing the tracker.
+<tr>
+<td align="center">
+<img src="docs/traj_eventreplica_office4_orig_fstep=4_ours.png" width="640">
+</td>
+
+<td align="center">
+<img src="docs/traj_eventreplica_room0_orig_fstep=4_ours.png" width="640">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<b>Frame step = 4</b>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img src="docs/traj_eventreplica_office4_orig_fstep=8_ours.png" width="640">
+</td>
+
+<td align="center">
+<img src="docs/traj_eventreplica_room0_orig_fstep=8_ours.png" width="640">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<b>Frame step = 8</b>
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<img src="docs/traj_eventreplica_office4_orig_fstep=16_ours.png" width="640">
+</td>
+
+<td align="center">
+<img src="docs/traj_eventreplica_room0_orig_fstep=16_ours.png" width="640">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<b>Frame step = 16</b>
+</td>
+</tr>
+
+</table>
+
+EGS-SLAM does not converge to a meaningful camera trajectory even when every fourth frame is used for optimization:
+
+<table>
+
+<tr>
+<td align="center">
+<img src="docs/traj_eventreplica_office4_orig_fstep=4_egsslam.png" width="640">
+</td>
+
+<td align="center">
+<img src="docs/traj_eventreplica_room0_orig_fstep=4_egsslam.png" width="640">
+</td>
+</tr>
+
+<tr>
+<td align="center" colspan="2">
+<b>Frame step = 4</b>
+</td>
+</tr>
+
+</table>
+
+### Real data experiments
+
+In two out of four scenes of the DEVD dataset, `mahjong1` and `testbed1`, we outperform the baseline:
+
+| Interim Event Tracking | Frame Step | ATE (cm) ↓     | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|------------------------|------------|---------------|--------------|--------------|--------------|
+| ✗ | 4  | 18.13 ± 15.17 | 16.99 ± 0.26 | 0.54 ± 0.02 | 0.38 ± 0.04 |
+| ✓ | 4  | **4.22 ± 0.99** | 18.63 ± 1.67 | 0.61 ± 0.07 | 0.32 ± 0.11 |
+| ✗ | 8  | 35.85 ± 33.25 | 15.65 ± 1.55 | 0.48 ± 0.08 | 0.46 ± 0.03 |
+| ✓ | 8  | 9.24 ± 2.04 | 18.51 ± 1.72 | 0.61 ± 0.07 | 0.32 ± 0.12 |
+| ✗ | 16 | 33.39 ± 27.64 | 14.07 ± 1.17 | 0.39 ± 0.04 | 0.54 ± 0.02 |
+| ✓ | 16 | 12.69 ± 4.17 | 18.29 ± 1.31 | 0.60 ± 0.06 | 0.32 ± 0.10 |
+
+Results on the `mountain1` and `table1` scenes reveal a failure mode of our method with respect to the camera tracking:
+
+| Interim Event Tracking | Frame Step | ATE (cm) ↓      | PSNR ↑        | SSIM ↑        | LPIPS ↓       |
+|------------------------|------------|-----------------|---------------|---------------|---------------|
+| ✗ | 4  | **42.78 ± 23.08** | 14.34 ± 2.04 | 0.42 ± 0.04 | 0.50 ± 0.03 |
+| ✓ | 4  | 341.31 ± 99.99 | **17.92 ± 1.18** | 0.62 ± 0.04 | 0.30 ± 0.01 |
+| ✗ | 8  | **49.40 ± 41.17** | 13.26 ± 2.71 | 0.40 ± 0.03 | 0.52 ± 0.05 |
+| ✓ | 8  | 337.22 ± 99.90 | **17.86 ± 1.44** | 0.62 ± 0.04 | 0.29 ± 0.04 |
+| ✗ | 16 | **49.92 ± 45.52** | 13.60 ± 3.44 | 0.42 ± 0.03 | 0.51 ± 0.10 |
+| ✓ | 16 | 334.80 ± 104.57 | **17.38 ± 1.71** | 0.60 ± 0.02 | 0.32 ± 0.04 |
+
+Given insufficient quality of input 2D-3D correspondences, relative poses computed via PnP-RANSAC may introduce irrecoverable drift. On real data, the quality of correspondences is negatively influenced by two factors: sim-to-real generalization of the event tracker and noise from the sensors (event and depth cameras). One of the problematic scenes (`table1`) contains plenty of textureless surfaces which amplify the noise in event tracks. The other scene, `mountain1`, contains multiple objects with an identical appearance, potentially confusing the tracker.
+
+To ensure no catastrophic pose updates are made, computation of relative poses should be safeguarded with a measure of confidence per correspondence, allowing to filter out low-confidence points. This is currently unavailable in the event tracking SOTA.
 
 ## Secondary experiments & side insights
 
@@ -280,9 +380,10 @@ Point matching is known to not be robust to blur. The results below confirm this
 - one of the reasons for this poor performance is the assumption on small pose deltas between frames, allowing implicit optimization of poses via rendering losses
 - relative pose priors improve sparse-view performance by up to 2.5x while occasionally displaying instability on dense views
   - additional filtering based on the number or confidence of correspondences improves pose reliability, but requires manual tuning and is not scalable. Selecting reliable correspondences dynamically is a promising research direction
+- the resulting camera trajectories can be further improved via loop closure constraints and uncertainty-aware PnP variant
 - dense motion cues (RGB flow, event flow) outperform point matching in quality and robustness when both are paired with PnP for pose estimation, especially in textureless scenes
 - deblurring with EDI introduces artifacts that substantially harm camera tracking performance
-- limited generalization of event-based deep learning models bottlenecks downstream applications due to unreliable events priors. Creating a large-scale high-quality synthetic dataset for training such models is an important milestone for building real-world solutions with event cameras
+- limited generalization and lack of confidence estimation in event-based deep learning models bottlenecks downstream applications due to unreliable events priors. Creating a large-scale high-quality synthetic dataset for training such models, alongside incorporating confidence estimation techniques of [13] or similar, is an important milestone for building real-world solutions with event cameras
 
 What didn't work:
 
@@ -306,3 +407,6 @@ What didn't work:
 8. [LightGlue: Local Feature Matching at Light Speed](https://arxiv.org/abs/2306.13643)
 9. [Dense Continuous-Time Optical Flow from Event Cameras](https://github.com/uzh-rpg/bflow)
 10. [Segment Any Event Streams via Weighted Adaptation of Pivotal Tokens](https://github.com/zhiwen-xdu/EventSAM)
+11. [ETAP: Event-based Tracking of Any Point](https://github.com/tub-rip/ETAP)
+12. [Python package for the evaluation of odometry and SLAM](https://github.com/MichaelGrupp/evo)
+13. [CoTracker: It is Better to Track Together](https://arxiv.org/abs/2307.07635)
